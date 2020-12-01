@@ -237,6 +237,20 @@ void write_init_vars() {
     writeline("\n");
 }
 
+void write_func_sig() {
+    char name[16];
+    snprintf(name, 16, "int f_%02d(", Vars->size);
+    writeline(name);
+    for(int i = 0; i < Vars->size; i++) {
+        writeline("int ");
+        writeline(Vars->elements[i]);
+        if (i < Vars->size - 1) {
+            writeline(", ");
+        }
+    }
+    writeline(") {\n");
+}
+
 void sum_up_vars() {
     for(int i = 0; i < Vars->size; i++) {
         writeline("sum += ");
@@ -376,11 +390,10 @@ int main(int argc, char** argv) {
 
     push_element(Vars, "cur");
 
-    writeline("int main() {\n");
-    write_init_vars();
+    write_func_sig();
 
     write_body_lines();
-    writeline("return 0;\n}\n");
+    writeline("return cur;\n}\n");
 
     destroy_Array(Vars);
     destroy_Array(Opers);
